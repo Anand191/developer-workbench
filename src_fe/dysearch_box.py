@@ -8,7 +8,7 @@ from bokeh.models.widgets import Select, TextInput
 
 def get_suggestions(query):
     dictToSend = {"query": f"{query}"}
-    res = requests.post("http://127.0.0.1:5000/predict", json=dictToSend)
+    res = requests.post("http://jupyterlab:5000/predict", json=dictToSend)
     suggestions = literal_eval(res.json()[0]["autocompletions"])
     logger.info(f"update autocomplete options with new suggestions: {suggestions}")
     return (suggestions)

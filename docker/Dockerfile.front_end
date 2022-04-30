@@ -1,0 +1,17 @@
+FROM python:3.7-slim
+
+ARG shared_workspace=/opt/workspace
+
+ENV SHARED_WORKSPACE=${shared_workspace}
+
+EXPOSE 5006
+WORKDIR ${SHARED_WORKSPACE}
+
+COPY ./src_fe/ ${SHARED_WORKSPACE}
+RUN cd ${SHARED_WORKSPACE} && \
+    ls -al && \
+    pip install -r requirements.txt
+
+# VOLUME ${shared_workspace}
+
+CMD ["bokeh", "serve", "--show", "dysearch_box.py"]

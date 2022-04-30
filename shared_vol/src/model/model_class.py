@@ -1,11 +1,11 @@
 import string
 import random
 from loguru import logger
-from shared_vol.src.model.model_base import BaseModel
+from src.model.model_base import BaseModel
 
 
 class SampleModel(BaseModel):
-    def __init__(self, num_suggestions=5) -> None:
+    def __init__(self, num_suggestions=10) -> None:
         super().__init__()
         self.num = num_suggestions
         logger.info(f"Ready to provide {self.num} suggestions!!")

@@ -2,7 +2,7 @@ import json
 import flask
 from flask import Flask, jsonify
 from flask_cors import CORS
-from shared_vol.src import SampleModel
+from src import SampleModel
 
 
 app = Flask("QueryAutocompletion", static_url_path="", static_folder="./")
@@ -27,7 +27,7 @@ def autocomplete():
 
     """
     query = flask.request.json["query"]
-    model = SampleModel()
+    model = SampleModel(num_suggestions=5)
 
     autocompletions = model.predict(query)
     # serialize and return
@@ -35,4 +35,4 @@ def autocomplete():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", debug=True)
+    app.run(host="0.0.0.0", debug=True)

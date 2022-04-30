@@ -1,0 +1,29 @@
+FROM cluster-base
+
+# -- Layer: JupyterLab
+
+ARG spark_version=3.2.0
+ARG jupyterlab_version=3.3.4
+ARG shared_workspace=/opt/workspace
+
+RUN apt-get update -y && \
+    apt-get install -y python3-pip
+
+ENV SHARED_WORKSPACE=${shared_workspace}
+# -- Runtime
+
+EXPOSE 8888 5000
+WORKDIR ${SHARED_WORKSPACE}
+
+COPY ./shared_vol/ ${SHARED_WORKSPACE}
+
+RUN cd ${SHARED_WORKSPACE} && \
+    chmod +x start_services.sh && \
+    ls -al &&\
+    pip install -r requirements.txt
+    
+
+CMD ./start_services.sh
+
+# CMD python app.py ; jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=
+
