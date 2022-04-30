@@ -1,3 +1,10 @@
+#!/bin/bash
+
+mkdir -p shared-vol/history
+mkdir -p shared-vol/logs
+mkdir -p shared-vol/data
+mkdir -p shared-vol/notebooks
+
 # -- Software Stack Version
 
 SPARK_VERSION="3.2.0"
