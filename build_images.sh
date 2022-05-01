@@ -1,9 +1,9 @@
 #!/bin/bash
 
-mkdir -p shared-vol/history
-mkdir -p shared-vol/logs
-mkdir -p shared-vol/data
-mkdir -p shared-vol/notebooks
+mkdir -p shared_vol/history
+mkdir -p shared_vol/logs
+mkdir -p shared_vol/data
+mkdir -p shared_vol/notebooks
 
 # -- Software Stack Version
 
@@ -39,7 +39,7 @@ docker build \
   --build-arg spark_version="${SPARK_VERSION}" \
   --build-arg jupyterlab_version="${JUPYTERLAB_VERSION}" \
   -f docker/Dockerfile.jupyter_lab \
-  -t jupyterlab docker/
+  -t jupyterlab .
 
 docker build \
   -f docker/Dockerfile.front_end 
