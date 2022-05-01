@@ -42,5 +42,5 @@ docker build \
   -t jupyterlab .
 
 docker build \
-  -f docker/Dockerfile.front_end 
+  -f docker/Dockerfile.front_end \
   -t front_end .

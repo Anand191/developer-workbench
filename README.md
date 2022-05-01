@@ -1,40 +1,48 @@
 # developer-workbench
 
-Setup a quick to spin up workbench with docker with the possibility to select services
+Setup a quick to spin up workbench with docker with the possibility to select services. The workbech has following dependencies:
+
+- Docker Desktop - Mac
+- Docker Desktop with WSL2 Backend - Windows >=10
+- Git Bash - Windows only
+
+Note: Run all the following commands on Windows from Git Bash
 
 ## Build Docker images
 
-This builds all images needed for the setup.
+This builds all the necessary folders and images needed for the setup.
 
 ```
 ./build_images.sh
 ```
 
-## Prepare environment
+## Get Data
 
-This script creates required directories, which are used by the setup.
+After running the above build script download the data from the following location and place it inside **/shared_vol/data** folder
+```
+<Data Folder Link>
+```
 
-```
-./setup_env.sh
-```
 
 ## Start application
 
+- the **shared_vol/** folder is shared between dockers and host filesystem
+
+- to start the workbench on Mac/Linux run the following in terminal
 ```
-# this directory will be shared among Spark and Jupyter services
-mkdir ./shared-vol
-
-# download data, specify --with-csv if you want to download and unzip data in csv format (100Gb) as well
-cd shared-vol
-../collect-data.sh
-
-# this will start Docker compose application
-SHARED_DIR=`pwd`/shared_vol docker-compose up
+SHARED_DIR=`pwd`/shared_vol docker-compose -f docker-compose.yml up
+```
+- to start the workbench on Windows run the following in terminal
+```
+SHARED_DIR=~/path/to/developer-workbench/shared_vol docker-compose -f docker-compose-windows.yml up
 ```
 
 ## Application URLs
 
 - [JupyterLab](http://localhost:8888)
+- [Bokeh UI](http://localhost:5006)
+- [Elasticsearch](http://localhost:9200)
+- [Kibana](http://localhost:5601)
 - [Spark master](http://localhost:8080/home)
 - [Spark worker I](http://localhost:8081)
 - [Spark worker II](http://localhost:8082)
@@ -57,3 +65,11 @@ Removes all stopped containers and deletes images with intermediate layers.
 ```
 ./cleanup-docker.sh
 ```
+
+## Notes and Troubleshooting
+
+- This setup has been tested on windows only for Docker with WSL2 backend
+- The services that you need can be selected in the docker-compose file(s). Unnecessary services can simply be commented out before starting docker-compose
+- The ELK stack in docker-compose might throw a Max Virtual memory areas vm.max_map_count is too low error. Solution can be found at the following link for both Mac and Windows:
+- https://stackoverflow.com/questions/51445846/elasticsearch-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-inc
+
