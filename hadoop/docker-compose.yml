@@ -133,7 +133,7 @@ services:
     image: bde2020/spark-history-server:3.2.1-hadoop3.2
     container_name: spark-history-server
     volumes:
-      - /logs/spark-events-local:/tmp/spark-events
+      - ../logs/spark-events-local:/tmp/spark-events
     depends_on:
       - spark-master
     ports:
