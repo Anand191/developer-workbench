@@ -1,0 +1,8 @@
+pyspark==3.2.1
+pyarrow==7.0.0
+numpy
+pandas
+scipy
+jupyterlab
+ipywidgets
+tqdm
