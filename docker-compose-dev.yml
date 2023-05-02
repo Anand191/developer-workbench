@@ -4,7 +4,7 @@ services:
     image: python-310-devcontainer:latest
     container_name: python-dev-env
     volumes:
-      - .:/workspaces/qa_prod:cached
+      - .:/workspaces/developer-workbench:cached
     networks:
       - hadoop_local_cluster
     command: /bin/sh -c "while sleep 1000; do :; done"
