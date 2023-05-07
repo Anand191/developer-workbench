@@ -1,43 +1,94 @@
 # developer-workbench
 
-Setup a quick to spin up workbench with docker with the possibility to select services. The workbech has following dependencies:
+Providing a suite of docker based setups for local development and testing in a production environment. Currently the following stacks are available:
 
+- Hadoop - Hive - Spark - Python dev environment with Pyspark installed
+- ELK - Spark - Jupyterlab dev environment with Pyspark installed
+
+## Dependencies
+
+- Docker Engine - Ubuntu 22.04
 - Docker Desktop - Mac
 - Docker Desktop with WSL2 Backend - Windows >=10
 - Git Bash - Windows only
 
-Note: Run all the following commands on Windows from Git Bash
+Note: Run all the following commands on Windows from Git Bash if using Windows filesystem. If using WSL2 terminal execute the linux instructions directly.
 
-## Build Docker images
+## Hadoop-Hive-Spark-Python
+This stack starts a hadoop-hive-spark cluster and a python dev environment (with necessary libraries pre-installed) on the same docker network to facilitate inter service communication.
 
-This builds all the necessary folders and images needed for the setup.
+Please not I use a docker-compose.yml for the devcontainer instead of just the dockerfile since I wanted to retain the flexibility of adding more services to the dev compose file (e.g. a front end server) if needed/when I want to extend this setup.
+
+**NOTE:** Execute these commands from the root folder and On Windows please run all the following commands from WSL 
+
+### Init steps
+This builds the docker image for the devcontainer as well as creates the docker network which these services will use.
+```
+$ ./prerequisites.sh
+```
+
+### Start the compute stack
+Start the namenode, datanode, hive-server, hive-metastore, spark-master and spark-workers
+```
+$ cd hadoop && docker compose up
+```
+You can use any client such as docker desktop or [portainer](https://www.portainer.io/) to manage the containers from a UI interface
+
+### Add some data to hdfs
+The instructions for this step have been picked from [this blog](https://hshirodkar.medium.com/apache-hive-on-docker-4d7280ac6f8e).
+
+- Log into the hive server as follows. Or use docker desktop or portrainer to open an exec console
+```
+$ docker exec -it hive-server /bin/bash
+```
+- Create a hive table for weather data using the included hql
+```
+$ cd .. && cd hive_db
+$ hive -f employee_table.hql
+$ hadoop fs -put weather.csv hdfs://namenode:8020/user/hive/warehouse/testdb.db/weather
+```
+Validate the setup by navigating to http://localhost:9870/explorer.html#/user/hive/warehouse/testdb.db and verifying that the *weather* table has been create.
+
+### Testing the setup using PySpark
+Pre-requisite for this step is having **Dev Containers** installed in vscode. Following steps are for vscode:
+
+- ```Ctrl+Shift+P``` &Rarr; Dev Containers: Open Folder in Container
+- Open &harr;```notebooks/test_spark.ipynb```&harr; and fire away!!
+
+
+## ELK-Spark-Jupyterlab
+
+Pick and choose components from the compose file to build a separate stack
+
+### Build Docker images
+
+This builds all the necessary folders and images needed for the setup. Run it from the room folder
 
 ```
 ./build_images.sh
 ```
 
-## Get Data
+### Get Data
 
-After running the above build script download the data from the following location and place it inside **/shared_vol/data** folder
-```
-<Data Folder Link>
-```
+After running the above build script place your data inside **/shared_vol/data** folder
 
-
-## Start application
+### Start application
 
 - the **shared_vol/** folder is shared between dockers and host filesystem
 
 - to start the workbench on Mac/Linux run the following in terminal
+
 ```
 SHARED_DIR=`pwd`/shared_vol docker-compose -f docker-compose.yml up
 ```
+
 - to start the workbench on Windows run the following in terminal
+
 ```
 SHARED_DIR=~/path/to/developer-workbench/shared_vol docker-compose -f docker-compose-windows.yml up
 ```
 
-## Application URLs
+### Application URLs
 
 - [JupyterLab](http://localhost:8888)
 - [Bokeh UI](http://localhost:5006)
@@ -58,7 +109,7 @@ Sparklint doesn't fetch new logs automatically. To process new logs you can eith
 docker-compose -f docker-compose.yml restart sparklint
 ```
 
-## Cleanup Docker env
+### Cleanup Docker env
 
 Removes all stopped containers and deletes images with intermediate layers.
 
@@ -66,10 +117,9 @@ Removes all stopped containers and deletes images with intermediate layers.
 ./cleanup-docker.sh
 ```
 
-## Notes and Troubleshooting
+### Notes and Troubleshooting
 
 - This setup has been tested on windows only for Docker with WSL2 backend
 - The services that you need can be selected in the docker-compose file(s). Unnecessary services can simply be commented out before starting docker-compose
 - The ELK stack in docker-compose might throw a Max Virtual memory areas vm.max_map_count is too low error. Solution can be found at the following link for both Mac and Windows:
 - https://stackoverflow.com/questions/51445846/elasticsearch-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-inc
-
