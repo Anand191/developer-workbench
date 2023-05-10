@@ -44,7 +44,7 @@ $ docker exec -it hive-server /bin/bash
 - Create a hive table for weather data using the included hql
 ```
 $ cd .. && cd hive_db
-$ hive -f employee_table.hql
+$ hive -f weather_table.hql
 $ hadoop fs -put weather.csv hdfs://namenode:8020/user/hive/warehouse/testdb.db/weather
 ```
 Validate the setup by navigating to http://localhost:9870/explorer.html#/user/hive/warehouse/testdb.db and verifying that the *weather* table has been create.
