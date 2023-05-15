@@ -2,12 +2,11 @@
   "name": "developer-workbench",
   "dockerComposeFile": "../docker-compose-dev.yml",
   "service": "python-dev-env",
-  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "workspaceFolder": "/workspaces/", // {localWorkspaceFolderBasename}
   "shutdownAction": "stopCompose",
   "remoteUser": "nonroot",
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
-    // "ghcr.io/devcontainers-contrib/features/flake8:2": {},
     "ghcr.io/jungaretti/features/vim:1": {},
     "ghcr.io/devcontainers/features/git-lfs:1": {}
   },

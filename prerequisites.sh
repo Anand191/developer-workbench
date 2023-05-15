@@ -2,13 +2,13 @@
 
 mkdir -p logs
 
-# Building dev container image
-echo "================================================"
-echo "Building dev container image"
-docker build \
-  -f docker/Dockerfile.devcontainer \
-  -t python-310-devcontainer docker/
-echo "Finished building devcontainer image"
+# # Building dev container image
+# echo "================================================"
+# echo "Building dev container image"
+# docker build \
+#   -f docker/Dockerfile.devcontainer \
+#   -t python-310-devcontainer docker/
+# echo "Finished building devcontainer image"
 
 # Create the docker network for the stack
 echo "================================================"

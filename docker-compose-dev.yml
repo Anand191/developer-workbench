@@ -1,13 +1,16 @@
 version: "3"
 services:
   python-dev-env:
-    image: python-310-devcontainer:latest
-    container_name: python-dev-env
+    build:
+      context: .
+      dockerfile: Dockerfile.devcontainer
     volumes:
-      - .:/workspaces/developer-workbench:cached
+      - .:/workspaces:cached
     networks:
       - hadoop_local_cluster
     command: /bin/sh -c "while sleep 1000; do :; done"
+# image: python-310-devcontainer:latest
+# container_name: python-dev-env
 
 networks:
   hadoop_local_cluster:
