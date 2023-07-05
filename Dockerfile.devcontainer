@@ -1,26 +1,23 @@
-FROM python:3.10
+# Python 3.7 as base
+FROM python:3.7-buster
 
-# Install Java
-RUN apt update && \
-    apt install -y sudo && \
-    sudo apt install default-jdk -y
+RUN mkdir -p /usr/share/man/man1 /usr/share/man/man2
+
+# Install Java 11
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    openjdk-11-jre
 
 # Add non-root user
 ARG USERNAME=nonroot
 RUN groupadd --gid 1000 $USERNAME && \
     useradd --uid 1000 --gid 1000 -m $USERNAME
+
 ## Make sure to reflect new user in PATH
 ENV PATH="/home/${USERNAME}/.local/bin:${PATH}"
 USER $USERNAME
 
-## Pip dependencies
-# Upgrade pip
-RUN pip install --upgrade pip
 # Install production dependencies
-COPY --chown=nonroot:1000 requirements.txt /tmp/requirements.txt
-RUN pip install -r /tmp/requirements.txt && \
-    rm /tmp/requirements.txt
-# Install development dependencies
-# COPY --chown=nonroot:1000 requirements-dev.txt /tmp/requirements-dev.txt
-# RUN pip install -r /tmp/requirements-dev.txt && \
-#     rm /tmp/requirements-dev.txt
+COPY --chown=nonroot:1000 requirements_local.txt /tmp/requirements_local.txt
+RUN pip install -r /tmp/requirements_local.txt && \
+    rm /tmp/requirements_local.txt
